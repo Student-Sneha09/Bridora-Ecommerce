@@ -109,7 +109,7 @@ const HeroSection = () => {
             Explore Collection
           </Button>
 
-          <Button
+          {/* <Button
             variant="outlined"
             sx={{
               borderColor: "#C38822",
@@ -127,7 +127,7 @@ const HeroSection = () => {
             }}
           >
             Custom Design
-          </Button>
+          </Button> */}
         </Stack>
       </Box>
     </Box>
