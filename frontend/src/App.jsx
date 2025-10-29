@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
 import Collections from "./components/Collection";
 import AboutPage from "./components/About"; // or AboutSection
+import Contact from "./components/Contact";
 
 function App() {
   return (
@@ -20,6 +21,10 @@ function App() {
       <div id="about" style={{ scrollMarginTop: "70px" }}>
         <AboutPage />
       </div>
+
+      <div id="contact" style={{ scrollMarginTop: "70px" }}>
+  <Contact />
+</div>
     </>
   );
 }
