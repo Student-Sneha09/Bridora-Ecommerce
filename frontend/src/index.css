@@ -1,0 +1,33 @@
+/* Reset and base styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Playfair Display", serif;
+}
+
+/* Smooth scrolling for react-scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom color palette */
+:root {
+  --sunset: #fdd492;
+  --xanthous: #C38822;
+  --black: #000000;
+  --dark-green: #133925;
+  --white-smoke: #f2f2f2;
+}
+
+/* Background gradient for sections (optional utility) */
+.gradient-bg {
+  background: linear-gradient(90deg, var(--dark-green), var(--black));
+  color: var(--white-smoke);
+}
+
+/* Styling for sections (optional) */
+section {
+  min-height: 100vh;
+  padding: 100px 0;
+}
