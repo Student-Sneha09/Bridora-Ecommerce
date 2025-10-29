@@ -23,6 +23,22 @@ const Navbar = () => {
 
   const menuItems = ["Home", "Collections", "About", "Contact"];
 
+   // 🌿 Declare map here, outside JSX
+  const menuIdMap = {
+    Home: "home",
+    Collections: "collection",
+    About: "about",
+    Contact: "contact",
+  };
+
+  // 🌿 Smooth scroll function
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <>
       <AppBar
@@ -50,7 +66,7 @@ const Navbar = () => {
             />
           </Box>
 
-          {/* Spacer to push nav links + button to right */}
+          {/* Spacer */}
           <Box sx={{ flexGrow: 1 }} />
 
           {/* Desktop Menu */}
@@ -66,10 +82,10 @@ const Navbar = () => {
                 key={item}
                 sx={{
                   cursor: "pointer",
-                  transition: "color 0.3s",
                   "&:hover": { color: "#C38822" },
                   fontWeight: 500,
                 }}
+                onClick={() => scrollToSection(menuIdMap[item])}
               >
                 {item}
               </Typography>
@@ -82,12 +98,9 @@ const Navbar = () => {
                 color: "white",
                 fontWeight: 600,
                 borderRadius: "8px",
-                padding: "0.5rem 1.2rem",
                 textTransform: "none",
-                "&:hover": {
-                  backgroundColor: "#a26b18",
-                },
               }}
+              onClick={() => scrollToSection("collection")}
             >
               Shop Now
             </Button>
@@ -117,18 +130,26 @@ const Navbar = () => {
       >
         <List sx={{ mt: 2 }}>
           {menuItems.map((item) => (
-            <ListItem button key={item} onClick={handleDrawerToggle}>
+            <ListItem
+              button
+              key={item}
+              onClick={() => {
+                handleDrawerToggle();
+                scrollToSection(item.toLowerCase());
+              }}
+            >
               <ListItemText
                 primary={item}
                 sx={{
                   textAlign: "center",
-                  color: "#133925", // 🌿 your green color here
+                  color: "#133925",
                   fontWeight: 600,
                   "&:hover": { color: "#C38822" },
                 }}
               />
             </ListItem>
           ))}
+
           <Box textAlign="center" mt={2}>
             <Button
               variant="contained"
@@ -141,6 +162,10 @@ const Navbar = () => {
                 py: 1,
                 textTransform: "none",
                 "&:hover": { backgroundColor: "#a26b18" },
+              }}
+              onClick={() => {
+                handleDrawerToggle();
+                scrollToSection("collection");
               }}
             >
               Shop Now
