@@ -3,6 +3,14 @@ import { Box, Typography, Button, Stack } from "@mui/material";
 import heroImg from "../assets/image.png"; // your hero image path
 
 const HeroSection = () => {
+  // Smooth scroll function
+  const scrollToCollection = () => {
+    const element = document.getElementById("collection");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -32,7 +40,7 @@ const HeroSection = () => {
         }}
       />
 
-      {/* Dark Overlay for readability */}
+      {/* Dark Overlay */}
       <Box
         sx={{
           position: "absolute",
@@ -96,6 +104,7 @@ const HeroSection = () => {
               "&:hover": { backgroundColor: "#a26b18" },
               width: { xs: "80%", sm: "auto" },
             }}
+            onClick={scrollToCollection} // 🌿 Scrolls to collection
           >
             Explore Collection
           </Button>

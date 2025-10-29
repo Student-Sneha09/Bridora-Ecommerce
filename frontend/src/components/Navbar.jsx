@@ -23,7 +23,7 @@ const Navbar = () => {
 
   const menuItems = ["Home", "Collections", "About", "Contact"];
 
-   // 🌿 Declare map here, outside JSX
+  // Map menu item to section id
   const menuIdMap = {
     Home: "home",
     Collections: "collection",
@@ -31,28 +31,42 @@ const Navbar = () => {
     Contact: "contact",
   };
 
-  // 🌿 Smooth scroll function
+  // Smooth scroll function
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
+    const navbarHeight = 70; // height of your AppBar
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      const yOffset = -navbarHeight;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
     }
+  };
+
+  // Handles drawer item click smoothly
+  const handleDrawerClick = (id) => {
+    handleDrawerToggle();
+    // Wait until drawer closes and layout is stable
+    const scroll = () => scrollToSection(id);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(scroll); // double frame ensures no gap
+    });
   };
 
   return (
     <>
       <AppBar
-        position="static"
+        position="fixed"
         sx={{
-          background: "white",
+          backgroundImage: "linear-gradient(135deg, #bdf9e1ff, #41604fff)",
           color: "black",
           boxShadow: "none",
           padding: "0.3rem 3rem",
           maxHeight: "70px",
+          zIndex: 1200,
         }}
       >
         <Toolbar sx={{ display: "flex", alignItems: "center" }}>
-          {/* Left: Logo */}
+          {/* Logo */}
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <img
               src={logo}
@@ -66,7 +80,6 @@ const Navbar = () => {
             />
           </Box>
 
-          {/* Spacer */}
           <Box sx={{ flexGrow: 1 }} />
 
           {/* Desktop Menu */}
@@ -133,10 +146,7 @@ const Navbar = () => {
             <ListItem
               button
               key={item}
-              onClick={() => {
-                handleDrawerToggle();
-                scrollToSection(item.toLowerCase());
-              }}
+              onClick={() => handleDrawerClick(menuIdMap[item])}
             >
               <ListItemText
                 primary={item}
@@ -163,10 +173,7 @@ const Navbar = () => {
                 textTransform: "none",
                 "&:hover": { backgroundColor: "#a26b18" },
               }}
-              onClick={() => {
-                handleDrawerToggle();
-                scrollToSection("collection");
-              }}
+              onClick={() => handleDrawerClick("collection")}
             >
               Shop Now
             </Button>

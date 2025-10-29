@@ -8,13 +8,16 @@ function App() {
   return (
     <>
       <Navbar />
-      <div id="home">
+
+      <div id="home" style={{ scrollMarginTop: "70px" }}>
         <HeroSection />
       </div>
-      <div id="collection">
+
+      <div id="collection" style={{ scrollMarginTop: "70px" }}>
         <Collections />
       </div>
-      <div id="about">
+
+      <div id="about" style={{ scrollMarginTop: "70px" }}>
         <AboutPage />
       </div>
     </>
