@@ -1,9 +1,13 @@
 import React, { createContext, useState } from "react";
+import { useEffect } from "react";
 
 export const WishlistContext = createContext();
 
 const WishlistProvider = ({ children }) => {
-  const [wishlist, setWishlist] = useState([]);
+  const [wishlist, setWishlist] = useState(() => {
+  const saved = localStorage.getItem("wishlist");
+  return saved ? JSON.parse(saved) : [];
+});
 
   // ❤️ Add / Remove toggle
   const toggleWishlist = (product) => {
@@ -24,6 +28,10 @@ const WishlistProvider = ({ children }) => {
   const isInWishlist = (id) => {
     return wishlist.some((item) => item.id === id);
   };
+
+  useEffect(() => {
+  localStorage.setItem("wishlist", JSON.stringify(wishlist));
+}, [wishlist]);
 
   return (
     <WishlistContext.Provider
