@@ -8,6 +8,7 @@ import AboutPage from "./components/About";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import CategoryPage from "./components/CategoryPage"; // new
+import ProductDetails from "./components/ProductDetails";
 
 // 👇 Homepage layout (your existing UI)
 const HomePage = () => {
@@ -45,6 +46,7 @@ function App() {
 
         {/* 👇 new page */}
         <Route path="/collections/:category" element={<CategoryPage />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
       </Routes>
     </Router>
   );

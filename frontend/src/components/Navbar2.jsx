@@ -19,15 +19,7 @@ const Navbar2 = () => {
       <Toolbar sx={{ display: "flex", alignItems: "center" }}>
         
         {/* LEFT: Back Arrow */}
-        <IconButton onClick={() => {
-  navigate("/");
-  setTimeout(() => {
-    const section = document.getElementById("collection");
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
-    }
-  }, 100);
-}}>
+        <IconButton onClick={() => navigate(-1)}>
           <ArrowBackIcon sx={{ color: "#fff" }} />
         </IconButton>
 
