@@ -9,6 +9,8 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import CategoryPage from "./components/CategoryPage"; // new
 import ProductDetails from "./components/ProductDetails";
+import CartPage from "./components/CartPage";
+import WishlistPage from "./components/WishlistPage";
 
 // 👇 Homepage layout (your existing UI)
 const HomePage = () => {
@@ -47,6 +49,8 @@ function App() {
         {/* 👇 new page */}
         <Route path="/collections/:category" element={<CategoryPage />} />
         <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/wishlist" element={<WishlistPage />} />
       </Routes>
     </Router>
   );

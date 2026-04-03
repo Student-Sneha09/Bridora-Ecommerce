@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   AppBar,
   Toolbar,
@@ -10,12 +10,25 @@ import {
   List,
   ListItem,
   ListItemText,
+  Badge,
 } from "@mui/material";
+
 import MenuIcon from "@mui/icons-material/Menu";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+
+import { useNavigate } from "react-router-dom";
+import { CartContext } from "../context/CartContext";
+import { WishlistContext } from "../context/WishlistContext";
+
 import logo from "../assets/Logo.png";
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const { cart } = useContext(CartContext);
+  const { wishlist } = useContext(WishlistContext);
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
@@ -23,7 +36,6 @@ const Navbar = () => {
 
   const menuItems = ["Home", "Collections", "About", "Contact"];
 
-  // Map menu item to section id
   const menuIdMap = {
     Home: "home",
     Collections: "collection",
@@ -31,24 +43,25 @@ const Navbar = () => {
     Contact: "contact",
   };
 
-  // Smooth scroll function
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
-    const navbarHeight = 70; // height of your AppBar
+    const navbarHeight = 70;
+
     if (element) {
       const yOffset = -navbarHeight;
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      const y =
+        element.getBoundingClientRect().top +
+        window.pageYOffset +
+        yOffset;
+
       window.scrollTo({ top: y, behavior: "smooth" });
     }
   };
 
-  // Handles drawer item click smoothly
   const handleDrawerClick = (id) => {
     handleDrawerToggle();
-    // Wait until drawer closes and layout is stable
-    const scroll = () => scrollToSection(id);
     requestAnimationFrame(() => {
-      requestAnimationFrame(scroll); // double frame ensures no gap
+      requestAnimationFrame(() => scrollToSection(id));
     });
   };
 
@@ -60,9 +73,9 @@ const Navbar = () => {
           backgroundImage: "linear-gradient(135deg, #bdf9e1ff, #41604fff)",
           color: "black",
           boxShadow: "none",
-          padding: "0.3rem 3rem",
-          maxHeight: "70px",
-          zIndex: 1200,
+          px: { xs: 2, md: 5 },
+          height: "70px",
+          justifyContent: "center",
         }}
       >
         <Toolbar sx={{ display: "flex", alignItems: "center" }}>
@@ -72,10 +85,9 @@ const Navbar = () => {
               src={logo}
               alt="Bindora Logo"
               style={{
-                height: "80px",
-                width: "100px",
+                height: "60px",
+                width: "90px",
                 objectFit: "contain",
-                filter: "drop-shadow(0 0 4px rgba(255, 255, 255, 0.4))",
               }}
             />
           </Box>
@@ -95,8 +107,8 @@ const Navbar = () => {
                 key={item}
                 sx={{
                   cursor: "pointer",
-                  "&:hover": { color: "#C38822" },
                   fontWeight: 500,
+                  "&:hover": { color: "#C38822" },
                 }}
                 onClick={() => scrollToSection(menuIdMap[item])}
               >
@@ -104,6 +116,21 @@ const Navbar = () => {
               </Typography>
             ))}
 
+            {/* ❤️ Wishlist */}
+            <IconButton onClick={() => navigate("/wishlist")}>
+              <Badge badgeContent={wishlist.length} color="error">
+                <FavoriteIcon />
+              </Badge>
+            </IconButton>
+
+            {/* 🛒 Cart */}
+            <IconButton onClick={() => navigate("/cart")}>
+              <Badge badgeContent={cart.length} color="warning">
+                <ShoppingCartIcon />
+              </Badge>
+            </IconButton>
+
+            {/* Button */}
             <Button
               variant="contained"
               sx={{
@@ -112,6 +139,7 @@ const Navbar = () => {
                 fontWeight: 600,
                 borderRadius: "8px",
                 textTransform: "none",
+                "&:hover": { backgroundColor: "#a26b18" },
               }}
               onClick={() => scrollToSection("collection")}
             >
@@ -121,7 +149,7 @@ const Navbar = () => {
 
           {/* Mobile Menu Icon */}
           <IconButton
-            sx={{ display: { xs: "block", md: "none" }, color: "#133925" }}
+            sx={{ display: { xs: "block", md: "none" } }}
             onClick={handleDrawerToggle}
           >
             <MenuIcon />
@@ -129,19 +157,19 @@ const Navbar = () => {
         </Toolbar>
       </AppBar>
 
-      {/* Drawer for Mobile */}
+      {/* Drawer */}
       <Drawer
         anchor="right"
         open={drawerOpen}
         onClose={handleDrawerToggle}
         PaperProps={{
           sx: {
-            width: "240px",
-            backgroundImage: "linear-gradient(135deg, #f4f9f7ff, #bdfedaff)",
+            width: 260,
+            backgroundImage: "linear-gradient(135deg, #f4f9f7, #bdfeda)",
           },
         }}
       >
-        <List sx={{ mt: 2 }}>
+        <List sx={{ mt: 3 }}>
           {menuItems.map((item) => (
             <ListItem
               button
@@ -150,17 +178,28 @@ const Navbar = () => {
             >
               <ListItemText
                 primary={item}
-                sx={{
-                  textAlign: "center",
-                  color: "#133925",
-                  fontWeight: 600,
-                  "&:hover": { color: "#C38822" },
-                }}
+                sx={{ textAlign: "center", fontWeight: 600 }}
               />
             </ListItem>
           ))}
 
-          <Box textAlign="center" mt={2}>
+          {/* ❤️ Wishlist */}
+          <ListItem button onClick={() => navigate("/wishlist")}>
+            <ListItemText
+              primary={`Wishlist (${wishlist.length})`}
+              sx={{ textAlign: "center", fontWeight: 600 }}
+            />
+          </ListItem>
+
+          {/* 🛒 Cart */}
+          <ListItem button onClick={() => navigate("/cart")}>
+            <ListItemText
+              primary={`Cart (${cart.length})`}
+              sx={{ textAlign: "center", fontWeight: 600 }}
+            />
+          </ListItem>
+
+          <Box textAlign="center" mt={3}>
             <Button
               variant="contained"
               sx={{
@@ -171,7 +210,6 @@ const Navbar = () => {
                 px: 3,
                 py: 1,
                 textTransform: "none",
-                "&:hover": { backgroundColor: "#a26b18" },
               }}
               onClick={() => handleDrawerClick("collection")}
             >

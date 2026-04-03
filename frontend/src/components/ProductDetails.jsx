@@ -1,18 +1,25 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, Snackbar, Alert } from "@mui/material";
 import products from "../data/product";
 import Navbar2 from "./Navbar2";
+import { CartContext } from "../context/CartContext";
 
 const ProductDetails = () => {
+  const { addToCart } = useContext(CartContext);
   const { id } = useParams();
 
-  // find product
+  const [open, setOpen] = useState(false);
+
   const allProducts = Object.values(products).flat();
   const product = allProducts.find((p) => p.id === Number(id));
 
   if (!product) {
-    return <Typography sx={{ mt: 5, textAlign: "center" }}>Product not found</Typography>;
+    return (
+      <Typography sx={{ mt: 5, textAlign: "center" }}>
+        Product not found
+      </Typography>
+    );
   }
 
   return (
@@ -28,7 +35,7 @@ const ProductDetails = () => {
           display: "grid",
           gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
           gap: 5,
-          alignItems: "center", // ✅ better alignment
+          alignItems: "center",
         }}
       >
         {/* Image */}
@@ -38,9 +45,9 @@ const ProductDetails = () => {
             alt={product.name}
             style={{
               width: "100%",
-              maxWidth: "400px", // ✅ FIXED SIZE
+              maxWidth: "400px",
               borderRadius: "12px",
-              boxShadow: "0 10px 30px rgba(0,0,0,0.1)", // ✨ premium
+              boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
             }}
           />
         </Box>
@@ -61,10 +68,13 @@ const ProductDetails = () => {
             This is a beautifully handcrafted jewelry piece designed to elevate your style.
           </Typography>
 
-          {/* Buttons */}
           <Box sx={{ mt: 4, display: "flex", gap: 2 }}>
             <Button
               variant="outlined"
+              onClick={() => {
+                addToCart(product);
+                setOpen(true);
+              }}
               sx={{
                 borderColor: "#C38822",
                 color: "#C38822",
@@ -93,6 +103,17 @@ const ProductDetails = () => {
           </Box>
         </Box>
       </Box>
+
+      {/* ✅ Snackbar */}
+      <Snackbar
+        open={open}
+        autoHideDuration={2000}
+        onClose={() => setOpen(false)}
+      >
+        <Alert severity="success" sx={{ width: "100%" }}>
+          Added to cart successfully!
+        </Alert>
+      </Snackbar>
     </>
   );
 };
