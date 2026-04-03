@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { CartContext } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -11,6 +12,7 @@ import {
 import Navbar2 from "./Navbar2";
 
 const CartPage = () => {
+  const navigate = useNavigate();
   const { cart, increaseQty, decreaseQty, removeFromCart } =
   useContext(CartContext);
 
@@ -90,6 +92,11 @@ const CartPage = () => {
 
               <Button
                 variant="contained"
+                onClick={() =>
+  navigate("/checkout", {
+    state: { products: cart },
+  })
+}
                 sx={{
                   mt: 2,
                   backgroundColor: "#C38822",

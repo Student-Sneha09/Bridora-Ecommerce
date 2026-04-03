@@ -128,11 +128,15 @@ const ProductCard = ({ product }) => {
           {/* Order */}
           <Tooltip title="Order Now">
             <IconButton
-              onClick={handleOrder}
-              sx={{ color: "white", "&:hover": { color: "#C38822" } }}
-            >
-              <FlashOnIcon />
-            </IconButton>
+  onClick={(e) => {
+    e.stopPropagation();
+    navigate("/checkout", {
+      state: { products: [product] },
+    });
+  }}
+>
+  ⚡
+</IconButton>
           </Tooltip>
         </Box>
 

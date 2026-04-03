@@ -4,8 +4,10 @@ import { Box, Typography, Button, Snackbar, Alert } from "@mui/material";
 import products from "../data/product";
 import Navbar2 from "./Navbar2";
 import { CartContext } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 const ProductDetails = () => {
+  const navigate = useNavigate();
   const { addToCart } = useContext(CartContext);
   const { id } = useParams();
 
@@ -89,17 +91,24 @@ const ProductDetails = () => {
             </Button>
 
             <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#C38822",
-                fontWeight: 600,
-                "&:hover": {
-                  backgroundColor: "#a96f1c",
-                },
-              }}
-            >
-              Order Now
-            </Button>
+  type="button"
+  variant="contained"
+  onClick={(e) => {
+    e.preventDefault();
+    navigate("/checkout", {
+      state: { products: [product] }, // ✅ FIXED
+    });
+  }}
+  sx={{
+    backgroundColor: "#C38822",
+    fontWeight: 600,
+    "&:hover": {
+      backgroundColor: "#a96f1c",
+    },
+  }}
+>
+  Order Now
+</Button>
           </Box>
         </Box>
       </Box>
