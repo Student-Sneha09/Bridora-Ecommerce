@@ -1,12 +1,16 @@
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
 import Collections from "./components/Collection";
-import AboutPage from "./components/About"; // or AboutSection
+import AboutPage from "./components/About";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
+import CategoryPage from "./components/CategoryPage"; // new
 
-function App() {
+// 👇 Homepage layout (your existing UI)
+const HomePage = () => {
   return (
     <>
       <Navbar />
@@ -24,11 +28,25 @@ function App() {
       </div>
 
       <div id="contact" style={{ scrollMarginTop: "70px" }}>
-  <Contact />
-</div>
-      {/* ✅ Add Footer at the bottom */}
+        <Contact />
+      </div>
+
       <Footer />
     </>
+  );
+};
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        {/* 👇 your current page */}
+        <Route path="/" element={<HomePage />} />
+
+        {/* 👇 new page */}
+        <Route path="/collections/:category" element={<CategoryPage />} />
+      </Routes>
+    </Router>
   );
 }
 

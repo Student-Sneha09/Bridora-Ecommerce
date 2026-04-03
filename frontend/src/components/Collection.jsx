@@ -7,7 +7,7 @@ import {
   CardContent,
   CardMedia,
 } from "@mui/material";
-
+import { useNavigate } from "react-router-dom";
 import necklaceImg from "../assets/Necklace.jpeg";
 import earringsImg from "../assets/Earring.jpeg";
 import braceletImg from "../assets/Bracelet.jpeg";
@@ -31,6 +31,7 @@ const categories = [
 ];
 
 const Collections = () => {
+  const navigate = useNavigate();
   return (
     <Box
   sx={{
@@ -141,6 +142,7 @@ const Collections = () => {
 
               <Button
                 variant="outlined"
+                onClick={() => navigate(`/collections/${cat.title.toLowerCase()}`)}
                 sx={{
                   borderColor: "#C38822",
                   color: "#C38822",
