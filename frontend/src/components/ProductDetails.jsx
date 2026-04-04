@@ -1,10 +1,16 @@
-import React, { useContext, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Box, Typography, Button, Snackbar, Alert } from "@mui/material";
-import products from "../data/product";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  Box,
+  Typography,
+  Button,
+  Snackbar,
+  Alert,
+  CircularProgress,
+} from "@mui/material";
 import Navbar2 from "./Navbar2";
 import { CartContext } from "../context/CartContext";
-import { useNavigate } from "react-router-dom";
+import api from "../api";
 
 const ProductDetails = () => {
   const navigate = useNavigate();
@@ -12,15 +18,44 @@ const ProductDetails = () => {
   const { id } = useParams();
 
   const [open, setOpen] = useState(false);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const allProducts = Object.values(products).flat();
-  const product = allProducts.find((p) => p.id === Number(id));
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get(`/products/${id}/`);
+        setProduct(response.data);
+      } catch (error) {
+        console.error("Error fetching product details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <>
+        <Navbar2 />
+        <Box sx={{ textAlign: "center", mt: 8 }}>
+          <CircularProgress sx={{ color: "#C38822" }} />
+        </Box>
+      </>
+    );
+  }
 
   if (!product) {
     return (
-      <Typography sx={{ mt: 5, textAlign: "center" }}>
-        Product not found
-      </Typography>
+      <>
+        <Navbar2 />
+        <Typography sx={{ mt: 5, textAlign: "center" }}>
+          Product not found
+        </Typography>
+      </>
     );
   }
 
@@ -40,7 +75,6 @@ const ProductDetails = () => {
           alignItems: "center",
         }}
       >
-        {/* Image */}
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <img
             src={product.image}
@@ -54,20 +88,24 @@ const ProductDetails = () => {
           />
         </Box>
 
-        {/* Details */}
         <Box>
           <Typography variant="h4" sx={{ fontWeight: 700 }}>
             {product.name}
           </Typography>
 
           <Typography
-            sx={{ color: "#C38822", fontSize: "1.5rem", mt: 1, fontWeight: 600 }}
+            sx={{
+              color: "#C38822",
+              fontSize: "1.5rem",
+              mt: 1,
+              fontWeight: 600,
+            }}
           >
             ₹{product.price}
           </Typography>
 
           <Typography sx={{ mt: 2, color: "#555" }}>
-            This is a beautifully handcrafted jewelry piece designed to elevate your style.
+            {product.description}
           </Typography>
 
           <Box sx={{ mt: 4, display: "flex", gap: 2 }}>
@@ -91,29 +129,28 @@ const ProductDetails = () => {
             </Button>
 
             <Button
-  type="button"
-  variant="contained"
-  onClick={(e) => {
-    e.preventDefault();
-    navigate("/checkout", {
-      state: { products: [product] }, // ✅ FIXED
-    });
-  }}
-  sx={{
-    backgroundColor: "#C38822",
-    fontWeight: 600,
-    "&:hover": {
-      backgroundColor: "#a96f1c",
-    },
-  }}
->
-  Order Now
-</Button>
+              type="button"
+              variant="contained"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/checkout", {
+                  state: { products: [product] },
+                });
+              }}
+              sx={{
+                backgroundColor: "#C38822",
+                fontWeight: 600,
+                "&:hover": {
+                  backgroundColor: "#a96f1c",
+                },
+              }}
+            >
+              Order Now
+            </Button>
           </Box>
         </Box>
       </Box>
 
-      {/* ✅ Snackbar */}
       <Snackbar
         open={open}
         autoHideDuration={2000}
