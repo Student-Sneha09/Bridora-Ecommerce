@@ -20,10 +20,10 @@ const Footer = () => {
             variant="h5"
             sx={{ fontWeight: "bold", mb: 2, fontFamily: "Poppins" }}
           >
-            Bindora By Aditi
+            Bridora By Aditi
           </Typography>
           <Typography sx={{ lineHeight: 1.8 }}>
-            Bindora brings you elegant, handcrafted collections designed to
+            Bridora brings you elegant, handcrafted collections designed to
 
             reflect beauty, culture, and craftsmanship.
           </Typography>
@@ -104,7 +104,7 @@ const Footer = () => {
         }}
       >
         <Typography variant="body2">
-          © 2025 Bindora. All Rights Reserved.
+          © 2026 Bridora. All Rights Reserved.
         </Typography>
       </Box>
     </Box>

@@ -13,6 +13,8 @@ import CartPage from "./components/CartPage";
 import WishlistPage from "./components/WishlistPage";
 import CheckoutPage from "./components/CheckoutPage";
 import SuccessPage from "./components/SuccessPage";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
 
 // 👇 Homepage layout (your existing UI)
 const HomePage = () => {
@@ -55,6 +57,8 @@ function App() {
         <Route path="/wishlist" element={<WishlistPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/success" element={<SuccessPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </Router>
   );

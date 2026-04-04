@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+
 import {
   Box,
   Typography,
@@ -16,6 +18,7 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const { addToCart } = useContext(CartContext);
   const { id } = useParams();
+  const { user } = useContext(AuthContext);
 
   const [open, setOpen] = useState(false);
   const [product, setProduct] = useState(null);
@@ -129,24 +132,30 @@ const ProductDetails = () => {
             </Button>
 
             <Button
-              type="button"
-              variant="contained"
-              onClick={(e) => {
-                e.preventDefault();
-                navigate("/checkout", {
-  state: { products: [product], fromCart: false },
-});
-              }}
-              sx={{
-                backgroundColor: "#C38822",
-                fontWeight: 600,
-                "&:hover": {
-                  backgroundColor: "#a96f1c",
-                },
-              }}
-            >
-              Order Now
-            </Button>
+  type="button"
+  variant="contained"
+  onClick={(e) => {
+    e.preventDefault();
+
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    navigate("/checkout", {
+      state: { products: [product], fromCart: false },
+    });
+  }}
+  sx={{
+    backgroundColor: "#C38822",
+    fontWeight: 600,
+    "&:hover": {
+      backgroundColor: "#a96f1c",
+    },
+  }}
+>
+  Order Now
+</Button>
           </Box>
         </Box>
       </Box>

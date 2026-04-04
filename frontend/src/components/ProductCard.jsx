@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import {
   Card,
   CardMedia,
@@ -23,6 +24,7 @@ import { WishlistContext } from "../context/WishlistContext";
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
   const { addToCart } = useContext(CartContext);
+  const { user } = useContext(AuthContext);
   const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
 
   const [liked, setLiked] = useState(false);
@@ -127,17 +129,24 @@ const ProductCard = ({ product }) => {
 
           {/* Order */}
           <Tooltip title="Order Now">
-            <IconButton
-  onClick={(e) => {
-    e.stopPropagation();
-    navigate("/checkout", {
-      state: { products: [product] },
-    });
-  }}
->
-  ⚡
-</IconButton>
-          </Tooltip>
+  <IconButton
+    onClick={(e) => {
+      e.stopPropagation();
+
+      if (!user) {
+        navigate("/login");
+        return;
+      }
+
+      navigate("/checkout", {
+        state: { products: [product], fromCart: false },
+      });
+    }}
+    sx={{ color: "white", "&:hover": { color: "#C38822" } }}
+  >
+    <FlashOnIcon />
+  </IconButton>
+</Tooltip>
         </Box>
 
         {/* Content */}

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -13,6 +13,13 @@ import Navbar2 from "./Navbar2";
 import { CartContext } from "../context/CartContext";
 
 const CheckoutPage = () => {
+  useEffect(() => {
+  if (!user) {
+    navigate("/login");
+  }
+}, [user, navigate]);
+
+if (!user) return null;
   const { clearCart } = useContext(CartContext);
   const location = useLocation();
   const navigate = useNavigate();

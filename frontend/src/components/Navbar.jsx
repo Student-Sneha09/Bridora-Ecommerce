@@ -20,6 +20,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 import { WishlistContext } from "../context/WishlistContext";
+import { AuthContext } from "../context/AuthContext";
 
 import logo from "../assets/Logo.png";
 
@@ -29,6 +30,7 @@ const Navbar = () => {
 
   const { cart } = useContext(CartContext);
   const { wishlist } = useContext(WishlistContext);
+  const { user, logoutUser } = useContext(AuthContext);
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
@@ -65,6 +67,14 @@ const Navbar = () => {
     });
   };
 
+  const handleProtectedNavigation = (path) => {
+  if (!user) {
+    navigate("/login");
+    return;
+  }
+  navigate(path);
+  };
+
   return (
     <>
       <AppBar
@@ -79,7 +89,6 @@ const Navbar = () => {
         }}
       >
         <Toolbar sx={{ display: "flex", alignItems: "center" }}>
-          {/* Logo */}
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <img
               src={logo}
@@ -94,12 +103,11 @@ const Navbar = () => {
 
           <Box sx={{ flexGrow: 1 }} />
 
-          {/* Desktop Menu */}
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
               alignItems: "center",
-              gap: "2rem",
+              gap: "1.5rem",
             }}
           >
             {menuItems.map((item) => (
@@ -116,21 +124,65 @@ const Navbar = () => {
               </Typography>
             ))}
 
-            {/* ❤️ Wishlist */}
-            <IconButton onClick={() => navigate("/wishlist")}>
-              <Badge badgeContent={wishlist.length} color="error">
-                <FavoriteIcon />
-              </Badge>
+            <IconButton onClick={() => handleProtectedNavigation("/wishlist")}>
+             <Badge badgeContent={wishlist.length} color="error">
+              <FavoriteIcon />
+             </Badge>
             </IconButton>
 
-            {/* 🛒 Cart */}
-            <IconButton onClick={() => navigate("/cart")}>
-              <Badge badgeContent={cart.length} color="warning">
-                <ShoppingCartIcon />
-              </Badge>
+            <IconButton onClick={() => handleProtectedNavigation("/cart")}>
+             <Badge badgeContent={cart.length} color="warning">
+              <ShoppingCartIcon />
+             </Badge>
             </IconButton>
 
-            {/* Button */}
+            {!user ? (
+              <>
+                <Button
+                  onClick={() => navigate("/login")}
+                  sx={{
+                    color: "black",
+                    fontWeight: 600,
+                    textTransform: "none",
+                  }}
+                >
+                  Login
+                </Button>
+
+                <Button
+                  variant="contained"
+                  onClick={() => navigate("/signup")}
+                  sx={{
+                    backgroundColor: "#C38822",
+                    color: "white",
+                    fontWeight: 600,
+                    borderRadius: "8px",
+                    textTransform: "none",
+                    "&:hover": { backgroundColor: "#a26b18" },
+                  }}
+                >
+                  Signup
+                </Button>
+              </>
+            ) : (
+              <>
+                <Typography sx={{ fontWeight: 600 }}>
+                  Hi, {user.username}
+                </Typography>
+
+                <Button
+                  onClick={logoutUser}
+                  sx={{
+                    color: "black",
+                    fontWeight: 600,
+                    textTransform: "none",
+                  }}
+                >
+                  Logout
+                </Button>
+              </>
+            )}
+
             <Button
               variant="contained"
               sx={{
@@ -147,7 +199,6 @@ const Navbar = () => {
             </Button>
           </Box>
 
-          {/* Mobile Menu Icon */}
           <IconButton
             sx={{ display: { xs: "block", md: "none" } }}
             onClick={handleDrawerToggle}
@@ -157,7 +208,6 @@ const Navbar = () => {
         </Toolbar>
       </AppBar>
 
-      {/* Drawer */}
       <Drawer
         anchor="right"
         open={drawerOpen}
@@ -172,9 +222,9 @@ const Navbar = () => {
         <List sx={{ mt: 3 }}>
           {menuItems.map((item) => (
             <ListItem
-              button
               key={item}
               onClick={() => handleDrawerClick(menuIdMap[item])}
+              sx={{ cursor: "pointer" }}
             >
               <ListItemText
                 primary={item}
@@ -183,21 +233,53 @@ const Navbar = () => {
             </ListItem>
           ))}
 
-          {/* ❤️ Wishlist */}
-          <ListItem button onClick={() => navigate("/wishlist")}>
-            <ListItemText
-              primary={`Wishlist (${wishlist.length})`}
-              sx={{ textAlign: "center", fontWeight: 600 }}
-            />
-          </ListItem>
+          <ListItem onClick={() => handleProtectedNavigation("/wishlist")} sx={{ cursor: "pointer" }}>
+  <ListItemText
+    primary={`Wishlist (${wishlist.length})`}
+    sx={{ textAlign: "center", fontWeight: 600 }}
+  />
+</ListItem>
 
-          {/* 🛒 Cart */}
-          <ListItem button onClick={() => navigate("/cart")}>
-            <ListItemText
-              primary={`Cart (${cart.length})`}
-              sx={{ textAlign: "center", fontWeight: 600 }}
-            />
-          </ListItem>
+<ListItem onClick={() => handleProtectedNavigation("/cart")} sx={{ cursor: "pointer" }}>
+  <ListItemText
+    primary={`Cart (${cart.length})`}
+    sx={{ textAlign: "center", fontWeight: 600 }}
+  />
+</ListItem>
+
+          {!user ? (
+            <>
+              <ListItem onClick={() => navigate("/login")} sx={{ cursor: "pointer" }}>
+                <ListItemText
+                  primary="Login"
+                  sx={{ textAlign: "center", fontWeight: 600 }}
+                />
+              </ListItem>
+
+              <ListItem onClick={() => navigate("/signup")} sx={{ cursor: "pointer" }}>
+                <ListItemText
+                  primary="Signup"
+                  sx={{ textAlign: "center", fontWeight: 600 }}
+                />
+              </ListItem>
+            </>
+          ) : (
+            <>
+              <ListItem>
+                <ListItemText
+                  primary={`Hi, ${user.username}`}
+                  sx={{ textAlign: "center", fontWeight: 600 }}
+                />
+              </ListItem>
+
+              <ListItem onClick={logoutUser} sx={{ cursor: "pointer" }}>
+                <ListItemText
+                  primary="Logout"
+                  sx={{ textAlign: "center", fontWeight: 600 }}
+                />
+              </ListItem>
+            </>
+          )}
 
           <Box textAlign="center" mt={3}>
             <Button

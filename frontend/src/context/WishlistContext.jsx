@@ -1,41 +1,49 @@
-import React, { createContext, useState } from "react";
-import { useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { AuthContext } from "./AuthContext";
 
 export const WishlistContext = createContext();
 
 const WishlistProvider = ({ children }) => {
-  const [wishlist, setWishlist] = useState(() => {
-  const saved = localStorage.getItem("wishlist");
-  return saved ? JSON.parse(saved) : [];
-});
+  const { user } = useContext(AuthContext);
 
-  // ❤️ Add / Remove toggle
+  const getWishlistKey = () => {
+    return user ? `wishlist_${user.username}` : "wishlist_guest";
+  };
+
+  const [wishlist, setWishlist] = useState([]);
+
+  useEffect(() => {
+    const storedWishlist = localStorage.getItem(getWishlistKey());
+    setWishlist(storedWishlist ? JSON.parse(storedWishlist) : []);
+  }, [user]);
+
+  useEffect(() => {
+    localStorage.setItem(getWishlistKey(), JSON.stringify(wishlist));
+  }, [wishlist, user]);
+
   const toggleWishlist = (product) => {
     setWishlist((prev) => {
       const exists = prev.find((item) => item.id === product.id);
 
       if (exists) {
-        // remove
         return prev.filter((item) => item.id !== product.id);
       }
 
-      // add
       return [...prev, product];
     });
   };
 
-  // check if already liked
   const isInWishlist = (id) => {
     return wishlist.some((item) => item.id === id);
   };
 
-  useEffect(() => {
-  localStorage.setItem("wishlist", JSON.stringify(wishlist));
-}, [wishlist]);
+  const clearWishlist = () => {
+    setWishlist([]);
+  };
 
   return (
     <WishlistContext.Provider
-      value={{ wishlist, toggleWishlist, isInWishlist }}
+      value={{ wishlist, toggleWishlist, isInWishlist, clearWishlist }}
     >
       {children}
     </WishlistContext.Provider>
