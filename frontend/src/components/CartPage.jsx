@@ -94,8 +94,8 @@ const CartPage = () => {
                 variant="contained"
                 onClick={() =>
   navigate("/checkout", {
-    state: { products: cart },
-  })
+  state: { products: cart, fromCart: true },
+})
 }
                 sx={{
                   mt: 2,

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -10,11 +10,15 @@ import {
 } from "@mui/material";
 import api from "../api";
 import Navbar2 from "./Navbar2";
+import { CartContext } from "../context/CartContext";
 
 const CheckoutPage = () => {
+  const { clearCart } = useContext(CartContext);
   const location = useLocation();
   const navigate = useNavigate();
+  
   const products = location.state?.products || [];
+  const fromCart = location.state?.fromCart || false;
 
   const [formData, setFormData] = useState({
     customer_name: "",
@@ -66,7 +70,11 @@ const CheckoutPage = () => {
 
       await api.post("/orders/", payload);
 
-      navigate("/success");
+      if (fromCart) {
+      clearCart();
+     }
+
+     navigate("/success");
     } catch (error) {
       console.error("Error placing order:", error);
       alert("Failed to place order. Please try again.");

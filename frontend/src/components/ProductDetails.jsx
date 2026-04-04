@@ -134,8 +134,8 @@ const ProductDetails = () => {
               onClick={(e) => {
                 e.preventDefault();
                 navigate("/checkout", {
-                  state: { products: [product] },
-                });
+  state: { products: [product], fromCart: false },
+});
               }}
               sx={{
                 backgroundColor: "#C38822",
