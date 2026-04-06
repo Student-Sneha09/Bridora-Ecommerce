@@ -2,7 +2,6 @@ import React, { useState, useContext } from "react";
 import {
   AppBar,
   Toolbar,
-  Button,
   Box,
   Typography,
   IconButton,
@@ -11,6 +10,7 @@ import {
   ListItem,
   ListItemText,
   Badge,
+  Button,
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
@@ -32,10 +32,6 @@ const Navbar = () => {
   const { wishlist } = useContext(WishlistContext);
   const { user, logoutUser } = useContext(AuthContext);
 
-  const handleDrawerToggle = () => {
-    setDrawerOpen(!drawerOpen);
-  };
-
   const menuItems = ["Home", "Collections", "About", "Contact"];
 
   const menuIdMap = {
@@ -50,29 +46,25 @@ const Navbar = () => {
     const navbarHeight = 70;
 
     if (element) {
-      const yOffset = -navbarHeight;
       const y =
         element.getBoundingClientRect().top +
-        window.pageYOffset +
-        yOffset;
+        window.pageYOffset -
+        navbarHeight;
 
       window.scrollTo({ top: y, behavior: "smooth" });
     }
   };
 
-  const handleDrawerClick = (id) => {
-    handleDrawerToggle();
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => scrollToSection(id));
-    });
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen);
   };
 
   const handleProtectedNavigation = (path) => {
-  if (!user) {
-    navigate("/login");
-    return;
-  }
-  navigate(path);
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    navigate(path);
   };
 
   return (
@@ -80,7 +72,7 @@ const Navbar = () => {
       <AppBar
         position="fixed"
         sx={{
-          backgroundImage: "linear-gradient(135deg, #bdf9e1ff, #41604fff)",
+          backgroundImage: "linear-gradient(135deg, #bdf9e1, #41604f)",
           color: "black",
           boxShadow: "none",
           px: { xs: 2, md: 5 },
@@ -88,21 +80,19 @@ const Navbar = () => {
           justifyContent: "center",
         }}
       >
-        <Toolbar sx={{ display: "flex", alignItems: "center" }}>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Toolbar>
+          {/* Logo */}
+          <Box>
             <img
               src={logo}
-              alt="Bindora Logo"
-              style={{
-                height: "60px",
-                width: "90px",
-                objectFit: "contain",
-              }}
+              alt="Logo"
+              style={{ height: "60px", width: "90px" }}
             />
           </Box>
 
           <Box sx={{ flexGrow: 1 }} />
 
+          {/* Desktop Menu */}
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
@@ -110,12 +100,14 @@ const Navbar = () => {
               gap: "1.5rem",
             }}
           >
+            {/* MENU ITEMS */}
             {menuItems.map((item) => (
               <Typography
                 key={item}
                 sx={{
                   cursor: "pointer",
                   fontWeight: 500,
+                  fontSize: "16px",
                   "&:hover": { color: "#C38822" },
                 }}
                 onClick={() => scrollToSection(menuIdMap[item])}
@@ -124,81 +116,88 @@ const Navbar = () => {
               </Typography>
             ))}
 
+            {/* Wishlist */}
             <IconButton onClick={() => handleProtectedNavigation("/wishlist")}>
-             <Badge badgeContent={wishlist.length} color="error">
-              <FavoriteIcon />
-             </Badge>
+              <Badge badgeContent={wishlist.length} color="error">
+                <FavoriteIcon />
+              </Badge>
             </IconButton>
 
+            {/* Cart */}
             <IconButton onClick={() => handleProtectedNavigation("/cart")}>
-             <Badge badgeContent={cart.length} color="warning">
-              <ShoppingCartIcon />
-             </Badge>
+              <Badge badgeContent={cart.length} color="warning">
+                <ShoppingCartIcon />
+              </Badge>
             </IconButton>
 
+            {/* AUTH (SAME STYLE AS MENU) */}
             {!user ? (
               <>
-                <Button
-                  onClick={() => navigate("/login")}
+                <Typography
                   sx={{
-                    color: "black",
-                    fontWeight: 600,
-                    textTransform: "none",
+                    cursor: "pointer",
+                    fontWeight: 500,
+                    fontSize: "16px",
+                    "&:hover": { color: "#C38822" },
                   }}
+                  onClick={() => navigate("/login")}
                 >
                   Login
-                </Button>
+                </Typography>
 
-                <Button
-                  variant="contained"
-                  onClick={() => navigate("/signup")}
+                <Typography
                   sx={{
-                    backgroundColor: "#C38822",
-                    color: "white",
-                    fontWeight: 600,
-                    borderRadius: "8px",
-                    textTransform: "none",
-                    "&:hover": { backgroundColor: "#a26b18" },
+                    cursor: "pointer",
+                    fontWeight: 500,
+                    fontSize: "16px",
+                    "&:hover": { color: "#C38822" },
                   }}
+                  onClick={() => navigate("/signup")}
                 >
                   Signup
-                </Button>
+                </Typography>
               </>
             ) : (
               <>
-                <Typography sx={{ fontWeight: 600 }}>
+                <Typography
+                  sx={{
+                    fontWeight: 500,
+                    fontSize: "16px",
+                  }}
+                >
                   Hi, {user.username}
                 </Typography>
 
-                <Button
-                  onClick={logoutUser}
+                <Typography
                   sx={{
-                    color: "black",
-                    fontWeight: 600,
-                    textTransform: "none",
+                    cursor: "pointer",
+                    fontWeight: 500,
+                    fontSize: "16px",
+                    "&:hover": { color: "#C38822" },
                   }}
+                  onClick={logoutUser}
                 >
                   Logout
-                </Button>
+                </Typography>
               </>
             )}
-
             <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#C38822",
-                color: "white",
-                fontWeight: 600,
-                borderRadius: "8px",
-                textTransform: "none",
-                "&:hover": { backgroundColor: "#a26b18" },
-              }}
-              onClick={() => scrollToSection("collection")}
-            >
-              Shop Now
-            </Button>
+  variant="contained"
+  sx={{
+    backgroundColor: "#C38822",
+    color: "white",
+    fontWeight: 600,
+    borderRadius: "8px",
+    textTransform: "none",
+    "&:hover": { backgroundColor: "#a26b18" },
+  }}
+  onClick={() => scrollToSection("collection")}
+>
+  Shop Now
+</Button>
           </Box>
 
+          {/* Mobile Menu Icon */}
           <IconButton
             sx={{ display: { xs: "block", md: "none" } }}
             onClick={handleDrawerToggle}
@@ -208,59 +207,44 @@ const Navbar = () => {
         </Toolbar>
       </AppBar>
 
+      {/* Drawer (Mobile) */}
       <Drawer
         anchor="right"
         open={drawerOpen}
         onClose={handleDrawerToggle}
-        PaperProps={{
-          sx: {
-            width: 260,
-            backgroundImage: "linear-gradient(135deg, #f4f9f7, #bdfeda)",
-          },
-        }}
       >
-        <List sx={{ mt: 3 }}>
+        <List sx={{ mt: 3, width: 250 }}>
           {menuItems.map((item) => (
             <ListItem
               key={item}
-              onClick={() => handleDrawerClick(menuIdMap[item])}
-              sx={{ cursor: "pointer" }}
+              onClick={() => scrollToSection(menuIdMap[item])}
             >
-              <ListItemText
-                primary={item}
-                sx={{ textAlign: "center", fontWeight: 600 }}
-              />
+              <ListItemText primary={item} sx={{ textAlign: "center" }} />
             </ListItem>
           ))}
 
-          <ListItem onClick={() => handleProtectedNavigation("/wishlist")} sx={{ cursor: "pointer" }}>
-  <ListItemText
-    primary={`Wishlist (${wishlist.length})`}
-    sx={{ textAlign: "center", fontWeight: 600 }}
-  />
-</ListItem>
+          <ListItem onClick={() => handleProtectedNavigation("/wishlist")}>
+            <ListItemText
+              primary={`Wishlist (${wishlist.length})`}
+              sx={{ textAlign: "center" }}
+            />
+          </ListItem>
 
-<ListItem onClick={() => handleProtectedNavigation("/cart")} sx={{ cursor: "pointer" }}>
-  <ListItemText
-    primary={`Cart (${cart.length})`}
-    sx={{ textAlign: "center", fontWeight: 600 }}
-  />
-</ListItem>
+          <ListItem onClick={() => handleProtectedNavigation("/cart")}>
+            <ListItemText
+              primary={`Cart (${cart.length})`}
+              sx={{ textAlign: "center" }}
+            />
+          </ListItem>
 
           {!user ? (
             <>
-              <ListItem onClick={() => navigate("/login")} sx={{ cursor: "pointer" }}>
-                <ListItemText
-                  primary="Login"
-                  sx={{ textAlign: "center", fontWeight: 600 }}
-                />
+              <ListItem onClick={() => navigate("/login")}>
+                <ListItemText primary="Login" sx={{ textAlign: "center" }} />
               </ListItem>
 
-              <ListItem onClick={() => navigate("/signup")} sx={{ cursor: "pointer" }}>
-                <ListItemText
-                  primary="Signup"
-                  sx={{ textAlign: "center", fontWeight: 600 }}
-                />
+              <ListItem onClick={() => navigate("/signup")}>
+                <ListItemText primary="Signup" sx={{ textAlign: "center" }} />
               </ListItem>
             </>
           ) : (
@@ -268,32 +252,31 @@ const Navbar = () => {
               <ListItem>
                 <ListItemText
                   primary={`Hi, ${user.username}`}
-                  sx={{ textAlign: "center", fontWeight: 600 }}
+                  sx={{ textAlign: "center" }}
                 />
               </ListItem>
 
-              <ListItem onClick={logoutUser} sx={{ cursor: "pointer" }}>
-                <ListItemText
-                  primary="Logout"
-                  sx={{ textAlign: "center", fontWeight: 600 }}
-                />
+              <ListItem onClick={logoutUser}>
+                <ListItemText primary="Logout" sx={{ textAlign: "center" }} />
               </ListItem>
             </>
           )}
-
-          <Box textAlign="center" mt={3}>
+          <Box textAlign="center" mt={2} px={2}>
             <Button
               variant="contained"
+              fullWidth
               sx={{
                 backgroundColor: "#C38822",
                 color: "white",
                 fontWeight: 600,
                 borderRadius: "8px",
-                px: 3,
-                py: 1,
                 textTransform: "none",
+                "&:hover": { backgroundColor: "#a26b18" },
               }}
-              onClick={() => handleDrawerClick("collection")}
+              onClick={() => {
+                handleDrawerToggle();
+                scrollToSection("collection");
+              }}
             >
               Shop Now
             </Button>
