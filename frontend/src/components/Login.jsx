@@ -1,8 +1,50 @@
 import React, { useContext, useState } from "react";
-import { Box, Typography, TextField, Button, Alert } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Paper,
+  Alert,
+} from "@mui/material";
+import { keyframes } from "@mui/system";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import Navbar2 from "./Navbar2";
+
+const gradientAnimation = keyframes`
+  0% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
+  100% { background-position: 0% 50% }
+`;
+
+const sparkle = keyframes`
+  0%,100% { opacity: 0.2; transform: scale(1) }
+  50% { opacity: 1; transform: scale(1.5) }
+`;
+
+const float = keyframes`
+  0% { transform: translateY(0px) }
+  50% { transform: translateY(-30px) }
+  100% { transform: translateY(0px) }
+`;
+
+const inputGlowSx = {
+  mb: 2,
+  "& .MuiOutlinedInput-root": {
+    borderRadius: "12px",
+    backgroundColor: "rgba(255,255,255,0.8)",
+    "& fieldset": {
+      borderColor: "rgba(19,57,37,0.18)",
+    },
+    "&:hover fieldset": {
+      borderColor: "#C38822",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#C38822",
+      boxShadow: "0 0 12px rgba(195,136,34,0.28)",
+    },
+  },
+};
 
 const Login = () => {
   const navigate = useNavigate();
@@ -13,79 +55,236 @@ const Login = () => {
     password: "",
   });
 
+  const [fieldErrors, setFieldErrors] = useState({
+    username: "",
+    password: "",
+  });
+
   const [error, setError] = useState("");
+  const [cursor, setCursor] = useState({ x: 0, y: 0 });
+
+  const validateForm = () => {
+    const errors = {
+      username: "",
+      password: "",
+    };
+
+    const username = formData.username.trim();
+    const password = formData.password;
+
+    if (!username) {
+      errors.username = "Username is required";
+    } else if (username.length < 3) {
+      errors.username = "Username must be at least 3 characters";
+    }
+
+    if (!password) {
+      errors.password = "Password is required";
+    } else if (password.length < 8) {
+      errors.password = "Password must be at least 8 characters";
+    }
+
+    setFieldErrors(errors);
+    return !Object.values(errors).some((value) => value);
+  };
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
+
+    setFieldErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+
+    setError("");
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
 
-    const result = await loginUser(formData.username, formData.password);
+    if (!validateForm()) return;
 
-    if (result.success) {
+    const res = await loginUser(
+      formData.username.trim(),
+      formData.password
+    );
+
+    if (res.success) {
       navigate("/");
     } else {
-      setError(result.message);
+      setError(res.message || "Login failed. Please check your credentials.");
     }
   };
 
   return (
-    <>
-      <Navbar2 />
-      <Box sx={{ maxWidth: "450px", mx: "auto", mt: 8, px: 3 }}>
-        <Typography variant="h4" sx={{ fontWeight: 700, mb: 3 }}>
-          Login
+    <Box
+      onMouseMove={(e) => setCursor({ x: e.clientX, y: e.clientY })}
+      sx={{
+        minHeight: "100vh",
+        position: "relative",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        overflow: "hidden",
+        background:
+          "linear-gradient(-45deg, #98f8c5, #62b487, #55a582, #54d199)",
+        backgroundSize: "400% 400%",
+        animation: `${gradientAnimation} 6s ease infinite`,
+        px: 2,
+      }}
+    >
+      <Box
+        sx={{
+          position: "absolute",
+          top: cursor.y - 150,
+          left: cursor.x - 150,
+          width: 300,
+          height: 300,
+          borderRadius: "50%",
+          background: "rgba(195,136,34,0.25)",
+          filter: "blur(120px)",
+          pointerEvents: "none",
+          transition: "0.1s",
+          zIndex: 0,
+        }}
+      />
+
+      {[...Array(15)].map((_, i) => (
+        <Box
+          key={i}
+          sx={{
+            position: "absolute",
+            width: 6,
+            height: 6,
+            bgcolor: "#C38822",
+            borderRadius: "50%",
+            top: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}%`,
+            animation: `${sparkle} ${2 + Math.random() * 3}s infinite`,
+          }}
+        />
+      ))}
+
+      <Box
+        sx={{
+          position: "absolute",
+          width: 300,
+          height: 300,
+          bgcolor: "#C38822",
+          borderRadius: "50%",
+          filter: "blur(140px)",
+          opacity: 0.2,
+          top: "10%",
+          left: "10%",
+          animation: `${float} 6s infinite`,
+        }}
+      />
+
+      <Box
+        sx={{
+          position: "absolute",
+          width: 250,
+          height: 250,
+          bgcolor: "#ffffff",
+          borderRadius: "50%",
+          filter: "blur(120px)",
+          opacity: 0.1,
+          bottom: "10%",
+          right: "10%",
+          animation: `${float} 8s infinite`,
+        }}
+      />
+
+      <Paper
+        elevation={12}
+        sx={{
+          p: 4,
+          width: "100%",
+          maxWidth: 420,
+          borderRadius: "20px",
+          backdropFilter: "blur(18px)",
+          background: "rgba(255,255,255,0.9)",
+          zIndex: 2,
+        }}
+      >
+        <Typography
+          textAlign="center"
+          sx={{
+            fontSize: "1.8rem",
+            fontWeight: 700,
+            color: "#133925",
+          }}
+        >
+          Welcome Back
         </Typography>
 
-        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+        <Typography textAlign="center" sx={{ mb: 3, color: "#666" }}>
+          Login to your account
+        </Typography>
 
-        <form onSubmit={handleLogin}>
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
+
+        <form onSubmit={handleLogin} noValidate>
           <TextField
-            label="Username"
-            name="username"
             fullWidth
-            sx={{ mb: 2 }}
+            name="username"
+            label="Username"
             value={formData.username}
             onChange={handleChange}
+            error={!!fieldErrors.username}
+            helperText={fieldErrors.username}
+            sx={inputGlowSx}
           />
 
           <TextField
-            label="Password"
-            name="password"
-            type="password"
             fullWidth
-            sx={{ mb: 2 }}
+            name="password"
+            label="Password"
+            type="password"
             value={formData.password}
             onChange={handleChange}
+            error={!!fieldErrors.password}
+            helperText={fieldErrors.password}
+            sx={inputGlowSx}
           />
 
           <Button
-            type="submit"
             fullWidth
+            type="submit"
             variant="contained"
             sx={{
-              backgroundColor: "#C38822",
-              "&:hover": { backgroundColor: "#a96f1c" },
+              py: 1.3,
+              borderRadius: "12px",
+              background: "linear-gradient(135deg, #C38822, #e0a93a)",
+              fontWeight: 700,
+              textTransform: "none",
+              "&:hover": {
+                transform: "scale(1.05)",
+                boxShadow: "0 6px 20px rgba(195,136,34,0.4)",
+              },
             }}
           >
             Login
           </Button>
         </form>
 
-        <Typography sx={{ mt: 2 }}>
-          Don’t have an account?{" "}
+        <Typography textAlign="center" sx={{ mt: 3 }}>
+          Don&apos;t have an account?{" "}
           <Link to="/signup" style={{ color: "#C38822" }}>
             Signup
           </Link>
         </Typography>
-      </Box>
-    </>
+      </Paper>
+    </Box>
   );
 };
 

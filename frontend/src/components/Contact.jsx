@@ -12,24 +12,56 @@ import {
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import api from "../api";
 
 const Contact = () => {
   const [open, setOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // you can later add form submission logic here
-    setOpen(true); // show success message
+
+    try {
+      setLoading(true);
+
+      await api.post("/contact/", formData);
+
+      setOpen(true);
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      });
+    } catch (error) {
+      console.error("Contact form error:", error);
+      setErrorOpen(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
     setOpen(false);
+    setErrorOpen(false);
   };
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "#f7f7f7", width: "100%" }}>
-      {/* Heading Section */}
       <Box textAlign="center" py={8}>
         <Typography
           variant="h3"
@@ -54,7 +86,6 @@ const Contact = () => {
           gap: 6,
         }}
       >
-        {/* Form Section */}
         <Paper
           elevation={4}
           sx={{
@@ -75,19 +106,43 @@ const Contact = () => {
 
           <form onSubmit={handleSubmit}>
             <Stack spacing={3}>
-              <TextField label="Name" variant="outlined" fullWidth required />
-              <TextField label="Email" variant="outlined" fullWidth type="email" required />
+              <TextField
+                label="Name"
+                name="name"
+                variant="outlined"
+                fullWidth
+                required
+                value={formData.name}
+                onChange={handleChange}
+              />
+
+              <TextField
+                label="Email"
+                name="email"
+                variant="outlined"
+                fullWidth
+                type="email"
+                required
+                value={formData.email}
+                onChange={handleChange}
+              />
+
               <TextField
                 label="Message"
+                name="message"
                 variant="outlined"
                 fullWidth
                 multiline
                 rows={6}
                 required
+                value={formData.message}
+                onChange={handleChange}
               />
+
               <Button
                 type="submit"
                 variant="contained"
+                disabled={loading}
                 sx={{
                   bgcolor: "#133925",
                   "&:hover": { bgcolor: "#0e261b" },
@@ -96,13 +151,12 @@ const Contact = () => {
                 }}
                 fullWidth
               >
-                SEND Message
+                {loading ? "Sending..." : "SEND Message"}
               </Button>
             </Stack>
           </form>
         </Paper>
 
-        {/* Contact Information */}
         <Paper
           elevation={6}
           sx={{
@@ -139,7 +193,6 @@ const Contact = () => {
         </Paper>
       </Box>
 
-      {/* ✅ Snackbar Notification */}
       <Snackbar
         open={open}
         autoHideDuration={4000}
@@ -150,12 +203,31 @@ const Contact = () => {
           onClose={handleClose}
           severity="success"
           sx={{
-      width: { xs: "90%", sm: "70%", md: "500px" }, // responsive widths
-      mx: "auto", // center horizontally
-      fontSize: { xs: "14px", sm: "16px" }, // smaller font on mobile
-    }}
+            width: { xs: "90%", sm: "70%", md: "500px" },
+            mx: "auto",
+            fontSize: { xs: "14px", sm: "16px" },
+          }}
         >
-          ✅ Your Message Sent Successfully — Continue Shopping!
+          ✅ Your Message Sent Successfully!
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={errorOpen}
+        autoHideDuration={4000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleClose}
+          severity="error"
+          sx={{
+            width: { xs: "90%", sm: "70%", md: "500px" },
+            mx: "auto",
+            fontSize: { xs: "14px", sm: "16px" },
+          }}
+        >
+          ❌ Failed to send message. Please try again.
         </Alert>
       </Snackbar>
     </Box>

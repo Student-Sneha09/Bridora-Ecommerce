@@ -13,36 +13,48 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const loginUser = async (username, password) => {
-    try {
-      const response = await api.post("/auth/login/", {
-        username,
-        password,
-      });
+  try {
+    const response = await api.post("/auth/login/", {
+      username,
+      password,
+    });
 
-      setAuthTokens(response.data);
-      localStorage.setItem("authTokens", JSON.stringify(response.data));
+    setAuthTokens(response.data);
+    localStorage.setItem("authTokens", JSON.stringify(response.data));
 
-      return { success: true };
-    } catch (error) {
-      console.error("Login error:", error);
-      return { success: false, message: "Invalid credentials" };
-    }
-  };
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      message:
+        error.response?.data?.detail ||
+        error.response?.data?.username?.[0] ||
+        error.response?.data?.password?.[0] ||
+        "Invalid username or password",
+    };
+  }
+};
 
   const signupUser = async (username, email, password) => {
-    try {
-      await api.post("/auth/signup/", {
-        username,
-        email,
-        password,
-      });
+  try {
+    await api.post("/auth/signup/", {
+      username,
+      email,
+      password,
+    });
 
-      return { success: true };
-    } catch (error) {
-      console.error("Signup error:", error);
-      return { success: false, message: "Signup failed" };
-    }
-  };
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      message:
+        error.response?.data?.username?.[0] ||
+        error.response?.data?.email?.[0] ||
+        error.response?.data?.password?.[0] ||
+        "Signup failed",
+    };
+  }
+};
 
   const logoutUser = () => {
     setAuthTokens(null);

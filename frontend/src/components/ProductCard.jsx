@@ -30,9 +30,25 @@ const ProductCard = ({ product }) => {
   const [liked, setLiked] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const handleShare = () => {
-    alert("Link copied / shared (feature later)");
+  const handleShare = async (product) => {
+  const shareData = {
+    title: product.name,
+    text: `Check out this product: ${product.name}`,
+    url: window.location.href + `/product/${product.id}`,
   };
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+    } else {
+      // fallback (copy link)
+      navigator.clipboard.writeText(shareData.url);
+      alert("Link copied!");
+    }
+  } catch (error) {
+    console.log("Error sharing:", error);
+  }
+};
 
   const handleCart = (e) => {
     e.stopPropagation(); // 🔥 VERY IMPORTANT
@@ -106,15 +122,10 @@ const ProductCard = ({ product }) => {
 
           {/* Share */}
           <Tooltip title="Share">
-            <IconButton
-              onClick={(e) => {
-                e.stopPropagation();
-                handleShare();
-              }}
-              sx={{ color: "white", "&:hover": { color: "#C38822" } }}
-            >
+            <IconButton onClick={() => handleShare(product)}
+              sx={{ color: "white", "&:hover": { color: "#C38822" } }}>
               <ShareIcon />
-            </IconButton>
+           </IconButton>
           </Tooltip>
 
           {/* Cart */}
