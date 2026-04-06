@@ -11,21 +11,17 @@ import {
 import api from "../api";
 import Navbar2 from "./Navbar2";
 import { CartContext } from "../context/CartContext";
+import { AuthContext } from "../context/AuthContext";
 
 const CheckoutPage = () => {
-  useEffect(() => {
-  if (!user) {
-    navigate("/login");
-  }
-}, [user, navigate]);
-
-if (!user) return null;
-  const { clearCart } = useContext(CartContext);
   const location = useLocation();
   const navigate = useNavigate();
-  
-  const products = location.state?.products || [];
+
+  const { clearCart } = useContext(CartContext);
+  const { user, authTokens } = useContext(AuthContext);
+
   const fromCart = location.state?.fromCart || false;
+  const products = location.state?.products || [];
 
   const [formData, setFormData] = useState({
     customer_name: "",
@@ -36,6 +32,12 @@ if (!user) return null;
 
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   const total = products.reduce(
     (sum, item) => sum + Number(item.price) * (item.quantity || 1),
@@ -75,13 +77,17 @@ if (!user) return null;
         })),
       };
 
-      await api.post("/orders/", payload);
+      await api.post("/orders/", payload, {
+        headers: {
+          Authorization: `Bearer ${authTokens.access}`,
+        },
+      });
 
       if (fromCart) {
-      clearCart();
-     }
+        clearCart();
+      }
 
-     navigate("/success");
+      navigate("/success");
     } catch (error) {
       console.error("Error placing order:", error);
       alert("Failed to place order. Please try again.");
@@ -89,6 +95,8 @@ if (!user) return null;
       setLoading(false);
     }
   };
+
+  if (!user) return null;
 
   if (!products.length) {
     return (
@@ -110,7 +118,6 @@ if (!user) return null;
           Checkout
         </Typography>
 
-        {/* Ordered products */}
         {products.map((item) => (
           <Box
             key={item.id}
@@ -147,7 +154,6 @@ if (!user) return null;
           Total: ₹{total.toFixed(2)}
         </Typography>
 
-        {/* Form */}
         <TextField
           label="Full Name"
           name="customer_name"
