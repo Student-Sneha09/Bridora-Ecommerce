@@ -47,9 +47,7 @@ const Navbar = () => {
 
     if (element) {
       const y =
-        element.getBoundingClientRect().top +
-        window.pageYOffset -
-        navbarHeight;
+        element.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
 
       window.scrollTo({ top: y, behavior: "smooth" });
     }
@@ -182,19 +180,19 @@ const Navbar = () => {
               </>
             )}
             <Button
-  variant="contained"
-  sx={{
-    backgroundColor: "#C38822",
-    color: "white",
-    fontWeight: 600,
-    borderRadius: "8px",
-    textTransform: "none",
-    "&:hover": { backgroundColor: "#a26b18" },
-  }}
-  onClick={() => scrollToSection("collection")}
->
-  Shop Now
-</Button>
+              variant="contained"
+              sx={{
+                backgroundColor: "#C38822",
+                color: "white",
+                fontWeight: 600,
+                borderRadius: "8px",
+                textTransform: "none",
+                "&:hover": { backgroundColor: "#a26b18" },
+              }}
+              onClick={() => scrollToSection("collection")}
+            >
+              Shop Now
+            </Button>
           </Box>
 
           {/* Mobile Menu Icon */}
@@ -208,11 +206,7 @@ const Navbar = () => {
       </AppBar>
 
       {/* Drawer (Mobile) */}
-      <Drawer
-        anchor="right"
-        open={drawerOpen}
-        onClose={handleDrawerToggle}
-      >
+      <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerToggle}>
         <List sx={{ mt: 3, width: 250 }}>
           {menuItems.map((item) => (
             <ListItem

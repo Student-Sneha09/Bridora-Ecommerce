@@ -34,14 +34,14 @@ const Collections = () => {
   const navigate = useNavigate();
   return (
     <Box
-  sx={{
-    width: "100%", // full screen width
-    backgroundColor: "#f9f7f3",
-    py: "5rem",
-    textAlign: "center",
-    overflowX: "hidden",
-  }}
->
+      sx={{
+        width: "100%", // full screen width
+        backgroundColor: "#f9f7f3",
+        py: "5rem",
+        textAlign: "center",
+        overflowX: "hidden",
+      }}
+    >
       {/* Heading */}
       <Typography
         variant="h3"
@@ -64,7 +64,8 @@ const Collections = () => {
           mx: "auto",
         }}
       >
-        Explore our curated selection of handcrafted jewelry, each piece telling its own unique story
+        Explore our curated selection of handcrafted jewelry, each piece telling
+        its own unique story
       </Typography>
 
       {/* CSS Grid - reliable three columns on md+ */}
@@ -95,9 +96,10 @@ const Collections = () => {
               display: "flex",
               flexDirection: "column",
               height: "100%",
-              minHeight: "360px",        // reduced height so 3 fit nicely
+              minHeight: "360px", // reduced height so 3 fit nicely
               border: "2px solid transparent",
-              transition: "transform 0.28s ease, box-shadow 0.28s ease, border 0.28s ease",
+              transition:
+                "transform 0.28s ease, box-shadow 0.28s ease, border 0.28s ease",
               "&:hover": {
                 transform: "translateY(-6px)",
                 border: "2px solid #C38822",
@@ -142,7 +144,9 @@ const Collections = () => {
 
               <Button
                 variant="outlined"
-                onClick={() => navigate(`/collections/${cat.title.toLowerCase()}`)}
+                onClick={() =>
+                  navigate(`/collections/${cat.title.toLowerCase()}`)
+                }
                 sx={{
                   borderColor: "#C38822",
                   color: "#C38822",

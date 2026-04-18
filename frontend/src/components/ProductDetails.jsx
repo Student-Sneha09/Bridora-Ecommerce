@@ -132,30 +132,30 @@ const ProductDetails = () => {
             </Button>
 
             <Button
-  type="button"
-  variant="contained"
-  onClick={(e) => {
-    e.preventDefault();
+              type="button"
+              variant="contained"
+              onClick={(e) => {
+                e.preventDefault();
 
-    if (!user) {
-      navigate("/login");
-      return;
-    }
+                if (!user) {
+                  navigate("/login");
+                  return;
+                }
 
-    navigate("/checkout", {
-      state: { products: [product], fromCart: false },
-    });
-  }}
-  sx={{
-    backgroundColor: "#C38822",
-    fontWeight: 600,
-    "&:hover": {
-      backgroundColor: "#a96f1c",
-    },
-  }}
->
-  Order Now
-</Button>
+                navigate("/checkout", {
+                  state: { products: [product], fromCart: false },
+                });
+              }}
+              sx={{
+                backgroundColor: "#C38822",
+                fontWeight: 600,
+                "&:hover": {
+                  backgroundColor: "#a96f1c",
+                },
+              }}
+            >
+              Order Now
+            </Button>
           </Box>
         </Box>
       </Box>

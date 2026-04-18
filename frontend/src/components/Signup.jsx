@@ -133,7 +133,7 @@ const Signup = () => {
     const res = await signupUser(
       formData.username.trim(),
       formData.email.trim(),
-      formData.password
+      formData.password,
     );
 
     if (res.success) {
@@ -141,7 +141,7 @@ const Signup = () => {
     } else {
       setError(
         res.message ||
-          "Signup failed. Please check your details and try again."
+          "Signup failed. Please check your details and try again.",
       );
     }
   };
@@ -248,7 +248,7 @@ const Signup = () => {
         </Typography>
 
         <Typography textAlign="center" sx={{ mb: 3, color: "#666" }}>
-          Join the Bindora experience
+          Join the Bridora experience
         </Typography>
 
         {error && (

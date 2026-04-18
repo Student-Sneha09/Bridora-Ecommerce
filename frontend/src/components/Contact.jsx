@@ -70,7 +70,8 @@ const Contact = () => {
           Get In Touch
         </Typography>
         <Typography variant="h6" color="#555">
-          Have a question or want to create something special? We'd love to hear from you
+          Have a question or want to create something special? We'd love to hear
+          from you
         </Typography>
       </Box>
 
@@ -168,12 +169,7 @@ const Contact = () => {
             justifyContent: "center",
           }}
         >
-          <Typography
-            variant="h5"
-            color="#133925"
-            gutterBottom
-            align="center"
-          >
+          <Typography variant="h5" color="#133925" gutterBottom align="center">
             Contact Information
           </Typography>
           <Stack spacing={3} mt={3} sx={{ fontSize: "18px" }}>

@@ -109,10 +109,7 @@ const Login = () => {
 
     if (!validateForm()) return;
 
-    const res = await loginUser(
-      formData.username.trim(),
-      formData.password
-    );
+    const res = await loginUser(formData.username.trim(), formData.password);
 
     if (res.success) {
       navigate("/");

@@ -17,7 +17,9 @@ const AboutPage = () => {
     >
       <Container maxWidth="lg">
         {/* Heading with two colors */}
-        <Box sx={{ textAlign: "center", mb: 1 }}> {/* reduced margin-bottom */}
+        <Box sx={{ textAlign: "center", mb: 1 }}>
+          {" "}
+          {/* reduced margin-bottom */}
           <Typography variant="h3" fontWeight={700} gutterBottom>
             <Box component="span" sx={{ color: "#133925" }}>
               The Art Of{" "}
@@ -26,16 +28,16 @@ const AboutPage = () => {
               Bridora
             </Box>
           </Typography>
-
           {/* Introductory paragraph */}
           <Typography
             variant="body1"
             sx={{ color: "#6f6f6f", maxWidth: "800px", mx: "auto", mt: 0 }}
           >
-            At Bridora by Aditi, we believe that jewelry is more than just adornment – 
-            it's a celebration of life's precious moments. Founded with a passion 
-            for timeless beauty and exceptional craftsmanship, we create pieces 
-            that become treasured heirlooms, passed down through generations.
+            At Bridora by Aditi, we believe that jewelry is more than just
+            adornment – it's a celebration of life's precious moments. Founded
+            with a passion for timeless beauty and exceptional craftsmanship, we
+            create pieces that become treasured heirlooms, passed down through
+            generations.
           </Typography>
         </Box>
 
@@ -61,34 +63,33 @@ const AboutPage = () => {
               Our Story
             </Typography>
             <Typography variant="body1" color="textSecondary" mb={1}>
-              Bridora started with a vision to connect quality products with the right
-              customers. Over the years, we have expanded our collection and grown
-              into a trusted ecommerce brand.
+              Bridora started with a vision to connect quality products with the
+              right customers. Over the years, we have expanded our collection
+              and grown into a trusted ecommerce brand.
             </Typography>
             <Typography variant="body1" color="textSecondary">
-              We strive to bring you the latest trends, premium quality products, and
-              a seamless online shopping experience. Customer satisfaction is our top
-              priority, and we are constantly innovating to meet your needs.
+              We strive to bring you the latest trends, premium quality
+              products, and a seamless online shopping experience. Customer
+              satisfaction is our top priority, and we are constantly innovating
+              to meet your needs.
             </Typography>
             {/* Italic line */}
-<Box sx={{ textAlign: "center", mt: 3 }}> {/* increased gap */}
-  <Typography
-    variant="body1"
-    sx={{ fontStyle: "italic", mb: 0.5 }}
-  >
-    "Every piece of jewelry tells a story. Let us help you tell yours."
-  </Typography>
-  <Typography
-    variant="body1"
-    sx={{ fontWeight: 700, color: "#C38822", mt: 0 }}
-  >
-    - Aditi, Founder
-  </Typography>
-</Box>
-
+            <Box sx={{ textAlign: "center", mt: 3 }}>
+              {" "}
+              {/* increased gap */}
+              <Typography variant="body1" sx={{ fontStyle: "italic", mb: 0.5 }}>
+                "Every piece of jewelry tells a story. Let us help you tell
+                yours."
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: 700, color: "#C38822", mt: 0 }}
+              >
+                - Aditi, Founder
+              </Typography>
+            </Box>
           </Box>
         </Box>
-
       </Container>
     </Box>
   );

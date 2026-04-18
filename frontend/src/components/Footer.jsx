@@ -24,7 +24,6 @@ const Footer = () => {
           </Typography>
           <Typography sx={{ lineHeight: 1.8 }}>
             Bridora brings you elegant, handcrafted collections designed to
-
             reflect beauty, culture, and craftsmanship.
           </Typography>
         </Grid>

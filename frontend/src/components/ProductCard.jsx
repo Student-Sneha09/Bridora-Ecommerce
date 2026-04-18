@@ -31,24 +31,24 @@ const ProductCard = ({ product }) => {
   const [open, setOpen] = useState(false);
 
   const handleShare = async (product) => {
-  const shareData = {
-    title: product.name,
-    text: `Check out this product: ${product.name}`,
-    url: window.location.href + `/product/${product.id}`,
-  };
+    const shareData = {
+      title: product.name,
+      text: `Check out this product: ${product.name}`,
+      url: window.location.href + `/product/${product.id}`,
+    };
 
-  try {
-    if (navigator.share) {
-      await navigator.share(shareData);
-    } else {
-      // fallback (copy link)
-      navigator.clipboard.writeText(shareData.url);
-      alert("Link copied!");
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        // fallback (copy link)
+        navigator.clipboard.writeText(shareData.url);
+        alert("Link copied!");
+      }
+    } catch (error) {
+      console.log("Error sharing:", error);
     }
-  } catch (error) {
-    console.log("Error sharing:", error);
-  }
-};
+  };
 
   const handleCart = (e) => {
     e.stopPropagation(); // 🔥 VERY IMPORTANT
@@ -109,23 +109,29 @@ const ProductCard = ({ product }) => {
         >
           {/* Wishlist */}
           <Tooltip title="Wishlist">
-  <IconButton
-    onClick={(e) => {
-      e.stopPropagation();
-      toggleWishlist(product);
-    }}
-    sx={{ color: "white", "&:hover": { color: "#C38822" } }}
-  >
-    {isInWishlist(product.id) ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-  </IconButton>
-</Tooltip>
+            <IconButton
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleWishlist(product);
+              }}
+              sx={{ color: "white", "&:hover": { color: "#C38822" } }}
+            >
+              {isInWishlist(product.id) ? (
+                <FavoriteIcon />
+              ) : (
+                <FavoriteBorderIcon />
+              )}
+            </IconButton>
+          </Tooltip>
 
           {/* Share */}
           <Tooltip title="Share">
-            <IconButton onClick={() => handleShare(product)}
-              sx={{ color: "white", "&:hover": { color: "#C38822" } }}>
+            <IconButton
+              onClick={() => handleShare(product)}
+              sx={{ color: "white", "&:hover": { color: "#C38822" } }}
+            >
               <ShareIcon />
-           </IconButton>
+            </IconButton>
           </Tooltip>
 
           {/* Cart */}
@@ -140,24 +146,24 @@ const ProductCard = ({ product }) => {
 
           {/* Order */}
           <Tooltip title="Order Now">
-  <IconButton
-    onClick={(e) => {
-      e.stopPropagation();
+            <IconButton
+              onClick={(e) => {
+                e.stopPropagation();
 
-      if (!user) {
-        navigate("/login");
-        return;
-      }
+                if (!user) {
+                  navigate("/login");
+                  return;
+                }
 
-      navigate("/checkout", {
-        state: { products: [product], fromCart: false },
-      });
-    }}
-    sx={{ color: "white", "&:hover": { color: "#C38822" } }}
-  >
-    <FlashOnIcon />
-  </IconButton>
-</Tooltip>
+                navigate("/checkout", {
+                  state: { products: [product], fromCart: false },
+                });
+              }}
+              sx={{ color: "white", "&:hover": { color: "#C38822" } }}
+            >
+              <FlashOnIcon />
+            </IconButton>
+          </Tooltip>
         </Box>
 
         {/* Content */}

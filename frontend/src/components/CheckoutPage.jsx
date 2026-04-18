@@ -41,7 +41,7 @@ const CheckoutPage = () => {
 
   const total = products.reduce(
     (sum, item) => sum + Number(item.price) * (item.quantity || 1),
-    0
+    0,
   );
 
   const handleChange = (e) => {
@@ -103,7 +103,9 @@ const CheckoutPage = () => {
       <>
         <Navbar2 />
         <Box sx={{ textAlign: "center", mt: 8 }}>
-          <Typography variant="h5">No products selected for checkout.</Typography>
+          <Typography variant="h5">
+            No products selected for checkout.
+          </Typography>
         </Box>
       </>
     );

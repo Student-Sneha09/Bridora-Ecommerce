@@ -9,12 +9,12 @@ import AuthProvider from "./context/AuthContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-      <AuthProvider>
-        <WishlistProvider>
-          <CartProvider>
-            <App />
-          </CartProvider>
-        </WishlistProvider>
-      </AuthProvider>
-  </React.StrictMode>
+    <AuthProvider>
+      <WishlistProvider>
+        <CartProvider>
+          <App />
+        </CartProvider>
+      </WishlistProvider>
+    </AuthProvider>
+  </React.StrictMode>,
 );
